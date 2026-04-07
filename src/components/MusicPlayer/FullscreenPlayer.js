@@ -10,6 +10,7 @@ import "./FullscreenPlayer.less"
 const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
 
 const FullscreenPlayer = ({
+    show,
     song,
     songs,
     playing,
@@ -31,7 +32,7 @@ const FullscreenPlayer = ({
     const starIcon = song.starred ? "star" : "star-o"
 
     return (
-        <div className="fullscreen-player">
+        <div className={`fullscreen-player ${show ? 'show' : ''}`}>
             {/* Top Bar */}
             <div className="fullscreen-header">
                 <IconButton
@@ -61,7 +62,11 @@ const FullscreenPlayer = ({
             {/* Song Info */}
             <div className="fullscreen-song-info">
                 <div className="info-text">
-                    <h2 className="song-title">{song.title}</h2>
+                    <div className="song-title-wrapper">
+                        <h2 className="song-title">
+                            <span>{song.title}</span>
+                        </h2>
+                    </div>
                     <p className="song-artist">{song.artist}</p>
                 </div>
                 <IconButton
@@ -94,6 +99,7 @@ const FullscreenPlayer = ({
                     title={`${playbackRate}x`}
                     onSelect={onChangePlaybackRate}
                     placement="topStart"
+                    className="playback-dropdown"
                     renderTitle={(children) => <span className="playback-rate">{children}</span>}
                 >
                     {playbackRates.map(rate => (
@@ -167,6 +173,7 @@ const FullscreenPlayer = ({
 }
 
 FullscreenPlayer.propTypes = {
+    show: PropTypes.bool,
     song: PropTypes.object,
     songs: PropTypes.array,
     playing: PropTypes.bool,

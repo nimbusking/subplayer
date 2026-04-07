@@ -12,6 +12,20 @@
     overflow-y: auto;
     color: #fff;
 
+    /* Transition effects */
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.3s ease-in-out, 
+                visibility 0.4s;
+
+    &.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
     /* Top Bar */
     .fullscreen-header {
         display: flex;
@@ -53,32 +67,65 @@
         align-items: center;
         margin-bottom: 30px;
         padding: 0 10px;
+        overflow: hidden;
 
         .info-text {
             flex: 1;
             overflow: hidden;
             
+            .song-title-wrapper {
+                overflow: hidden;
+                width: 100%;
+                /* Create a fade effect on edges when scrolling */
+                mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            }
+
             .song-title {
                 font-size: 1.5rem;
                 margin: 0 0 5px 0;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                display: inline-block;
+                min-width: 100%;
+
+                span {
+                    display: inline-block;
+                    padding-left: 5%;
+                    padding-right: 5%;
+                    animation: marquee 10s linear infinite;
+                    /* Pause animation when song is not playing if needed, 
+                       but usually always-on looks better in this context */
+                }
             }
 
             .song-artist {
                 font-size: 1rem;
                 color: #aaa;
                 margin: 0;
+                padding-left: 5%;
             }
         }
 
         .star-button {
             color: #fff;
+            flex-shrink: 0;
             &.rs-btn-link:hover {
                 color: #ff4d4f;
             }
         }
+    }
+
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        10% { transform: translateX(0); } /* Brief pause at start */
+        90% { transform: translateX(-50%); } /* Scroll through text */
+        100% { transform: translateX(-50%); }
+    }
+
+    /* Double text trick to make it seamless if you want infinite loop, 
+       but for basic marquee, we just scroll it back and forth or reset */
+    .song-title span::after {
+        content: attr(data-content);
+        padding-left: 50px;
     }
 
     /* Progress Bar */
@@ -119,24 +166,42 @@
         align-items: center !important;
         margin-bottom: 40px;
         padding: 0 10px;
-        height: 120px !important;
+        height: 100px !important;
 
-        .playback-rate, .main-controls, .shuffle-btn {
-            height: 100% !important;
-            display: flex !important;
-            align-items: center !important;
-            border: none !important;
+        /* Reset all icons and buttons in this area */
+        i, .rs-icon, .rs-dropdown-toggle, .playback-rate {
+            display: inline-block !important;
+            line-height: 1 !important;
+            height: auto !important;
+            vertical-align: middle !important;
             margin: 0 !important;
             padding: 0 !important;
-            background: none !important;
         }
 
-        .playback-rate {
+        .playback-dropdown, .main-controls, .shuffle-btn {
+            display: flex !important;
+            align-items: center !important;
+            background: none !important;
+            border: none !important;
+        }
+
+        .playback-dropdown {
             flex: 0 0 15%;
             justify-content: flex-start !important;
-            font-size: 1.2rem;
-            color: #fff;
-            cursor: pointer;
+
+            .rs-dropdown-toggle {
+                background: none !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                
+                &:after { display: none !important; } /* Hide default caret if any */
+            }
+
+            .playback-rate {
+                font-size: 1.2rem;
+                color: #fff;
+                cursor: pointer;
+            }
         }
 
         .main-controls {
@@ -148,30 +213,19 @@
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-                height: 100% !important;
                 
                 &.rs-btn-link {
                     padding: 0 !important;
                     text-decoration: none !important;
                 }
-
-                i, .rs-icon {
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    line-height: 0 !important;
-                    height: 1em !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                }
             }
 
             .control-btn i {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
 
             .play-pause-btn i {
-                font-size: 5rem;
+                font-size: 3rem;
             }
         }
 
@@ -182,13 +236,12 @@
             &.rs-btn-link {
                 padding: 0 !important;
                 color: #fff !important;
+                display: flex !important;
+                align-items: center !important;
             }
 
             i {
                 font-size: 1.8rem;
-                line-height: 0 !important;
-                display: flex !important;
-                align-items: center !important;
             }
 
             &.active {
