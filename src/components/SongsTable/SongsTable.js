@@ -236,7 +236,7 @@ export default class SongsTable extends React.Component {
                 }
 
                 { columnsToShow.includes(columns.duration) ? 
-                    <Column width={55}>
+                    <Column width={70}>
                         <HeaderCell><Icon icon='clock-o' /></HeaderCell>
                         <Cell dataKey="duration" >
                             { rowData => seconds_to_mss(rowData.duration)}
@@ -291,7 +291,7 @@ SongsTable.propTypes = {
 SongsTable.columns = columns
 
 // Defaults
-const defaultColumns = ["title", "artist", "album", "duration", "bitRate", "selectable", "download"]
+const defaultColumns = ["title", "artist", "album", "duration", "selectable", "download"]
 SongsTable.defaultProps = {
     height : -1,
     sortable : false,

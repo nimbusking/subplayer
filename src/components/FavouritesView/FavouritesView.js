@@ -7,7 +7,7 @@ import SongsTableEnhanced from '../SongsTableEnhanced'
 import { Button } from 'rsuite'
 import SongsTable from '../SongsTable/SongsTable'
 
-const COLUMNS_TO_SHOW = [SongsTable.columns.selectable, SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.bitRate, SongsTable.columns.download, SongsTable.columns.starred]
+const COLUMNS_TO_SHOW = [SongsTable.columns.selectable, SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.download, SongsTable.columns.starred]
 
 export default class FavouritesView extends React.Component {
 

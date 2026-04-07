@@ -10,7 +10,7 @@ import SongsTable from '../SongsTable/SongsTable'
 import SongsTableEnhanced from '../SongsTableEnhanced'
 import "./Album.less"
 
-const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.duration, SongsTable.columns.bitRate, SongsTable.columns.selectable, SongsTable.columns.download]
+const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.duration, SongsTable.columns.selectable, SongsTable.columns.download]
 
 export default function Album(props) {
     const { album, songs, style, starAlbums, linkArtist } = props

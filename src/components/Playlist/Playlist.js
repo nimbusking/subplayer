@@ -11,7 +11,7 @@ import EditPlaylistModal from '../EditPlaylistModal'
 import ResponsiveTitle from '../ResponsiveTitle' 
 import { Button, Icon, IconButton } from 'rsuite'
 
-const NOT_MINE_COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.bitRate, SongsTable.columns.download]
+const NOT_MINE_COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.download]
 const MINE_COLUMNS_TO_SHOW = [...NOT_MINE_COLUMNS_TO_SHOW, SongsTable.columns.selectable]
 
 export default class Playlist extends React.Component {
