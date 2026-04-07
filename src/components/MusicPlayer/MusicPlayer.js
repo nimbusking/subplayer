@@ -7,21 +7,28 @@ import subsonic from "../../api/subsonicApi"
 import { seconds_to_mss } from "../../utils/formatting.js"
 import * as settings from "../../utils/settings.js"
 // UI
-import { IconButton, Icon } from 'rsuite'
+import { IconButton, Icon, Dropdown } from 'rsuite'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import "./MusicPlayer.less"
 
+const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
+
 export default class MusicPlayer extends React.Component {
-    
+
     constructor(props) {
         super(props)
-        this.state = { playing:false, tick: 0, isMuted: false, volume: settings.getVolume() }
+        this.state = { playing:false, tick: 0, isMuted: false, volume: settings.getVolume(), playbackRate: settings.getPlaybackRate() || 1 }
         this.volumeBeforeMutting = 1.0
         this.isSeeking = false
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
+        // Check if playback rate changed
+        if (prevState.playbackRate !== this.state.playbackRate && this.streamer) {
+            this.streamer.rate(this.state.playbackRate)
+            settings.setPlaybackRate(this.state.playbackRate)
+        }
         // Check if there is a song to play
         if( this.props.song ) {
             var playNextSong = this.props.playNextSong
@@ -44,6 +51,7 @@ export default class MusicPlayer extends React.Component {
                     autoplay: true,
                     html5: true,
                     volume: this.state.volume,
+                    rate: this.state.playbackRate,
                     // Play next song
                     onend: function() {
                         playNextSong()
@@ -172,6 +180,10 @@ export default class MusicPlayer extends React.Component {
         }
     }
 
+    changePlaybackRate = (rate) => {
+        this.setState({ playbackRate: rate })
+    }
+
     playNextSong = () => {
         this.props.playNextSong && this.props.playNextSong()
     }
@@ -208,6 +220,7 @@ export default class MusicPlayer extends React.Component {
         const starIcon = song.starred ? "star" : "star-o"
         const volume = this.state.volume
         const isShuffleOn = this.props.isShuffleOn
+        const playbackRate = this.state.playbackRate
         return (
             <div className="music-player">
                 {/* Currently playing information */}
@@ -232,6 +245,16 @@ export default class MusicPlayer extends React.Component {
                         <Slider className="rs-slider song_progress_bar" value={seek} onChange={this.onSeeking} onAfterChange={this.onSeekingStopped} max={song.duration || 0} />
                         <span>{seconds_to_mss(song.duration || 0)}</span>
                     </div>
+                </div>
+                {/* Playback rate control */}
+                <div className="playback_rate_container">
+                    <Dropdown title={`${playbackRate}x`} onSelect={this.changePlaybackRate} className="playback-rate-dropdown" placement="topEnd">
+                        {playbackRates.map(rate => (
+                            <Dropdown.Item key={rate} eventKey={rate} active={rate === playbackRate}>
+                                {rate}x
+                            </Dropdown.Item>
+                        ))}
+                    </Dropdown>
                 </div>
                 {/* Toggle shuffle */}
                 <div className="shuffle_container rs-hidden-xs">

@@ -1,11 +1,13 @@
 .music-player {
     display: flex;
     flex-flow: row nowrap;
+    height: 65px;
     min-height: 65px;
     justify-content: space-around;
     align-items: center;
     padding-right: 30px;
     padding-left: 30px;
+    flex-shrink: 0;
 }
 
 /*
@@ -29,7 +31,42 @@
     }
 
     .music-player .song_metadata_container {
-        width: 210px !important;
+        width: 120px !important;
+    }
+
+    .music-player .song_metadata_container img {
+        width: 35px;
+        height: 35px;
+        margin-right: 5px;
+    }
+
+    .music-player .song_metadata_container #song_name {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .music-player .song_metadata_container #song_artist {
+        font-size: 10px;
+    }
+
+    .music-player .song_metadata_container #star_button {
+        padding: 5px;
+    }
+
+    /* Make playback rate button fit better on mobile */
+    .music-player .playback_rate_container {
+        margin: 0 2px;
+    }
+
+    .music-player .playback_rate_container .rs-dropdown-toggle {
+        padding: 2px 4px;
+        font-size: 10px;
+        min-width: 28px;
+    }
+
+    /* Make go to queue button smaller on mobile */
+    .music-player .go_to_queue_container .rs-btn-icon.rs-btn-lg {
+        padding: 8px;
     }
 }
 
@@ -95,6 +132,24 @@
 
 .song_progress_bar {
     flex-grow: 1;
+}
+
+/*
+ * Styles of the playback rate control
+ */
+
+.music-player .playback_rate_container {
+    margin: 0 5px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.music-player .playback_rate_container .rs-dropdown-toggle {
+    padding: 5px 8px;
+    font-size: 13px;
+    line-height: 1.2;
+    min-width: 40px;
+    text-align: center;
 }
 
 

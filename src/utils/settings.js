@@ -23,6 +23,18 @@ export function setVolume(value) {
 	localStorage.setItem('volume', value)
 }
 
+/* Playback Rate Settings */
+const DEFAULT_PLAYBACK_RATE = 1.0
+
+export function getPlaybackRate() {
+	const value = localStorage.getItem('playback_rate')
+	return value !== null ? parseFloat(value) : DEFAULT_PLAYBACK_RATE
+}
+
+export function setPlaybackRate(value) {
+	localStorage.setItem('playback_rate', value)
+}
+
 /* Shuffle Settings */
 const DEFAULT_IS_SHUFFLING = true
 
