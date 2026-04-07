@@ -11,6 +11,7 @@ import { IconButton, Icon, Dropdown } from 'rsuite'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import "./MusicPlayer.less"
+import FullscreenPlayer from './FullscreenPlayer'
 
 const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
 
@@ -18,9 +19,17 @@ export default class MusicPlayer extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { playing:false, tick: 0, isMuted: false, volume: settings.getVolume(), playbackRate: settings.getPlaybackRate() || 1 }
+        this.state = { playing:false, tick: 0, isMuted: false, volume: settings.getVolume(), playbackRate: settings.getPlaybackRate() || 1, showFullscreen: false }
         this.volumeBeforeMutting = 1.0
         this.isSeeking = false
+    }
+
+    toggleFullscreen = () => {
+        this.setState({ showFullscreen: !this.state.showFullscreen })
+    }
+
+    closeFullscreen = () => {
+        this.setState({ showFullscreen: false })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -215,23 +224,48 @@ export default class MusicPlayer extends React.Component {
 
     render () {
         const song = this.props.song ? this.props.song : {}
+        const songs = this.props.songs || []
         const playing = this.state.playing
         const seek = this.state.tick
         const starIcon = song.starred ? "star" : "star-o"
         const volume = this.state.volume
         const isShuffleOn = this.props.isShuffleOn
         const playbackRate = this.state.playbackRate
+        const showFullscreen = this.state.showFullscreen
+
         return (
-            <div className="music-player">
-                {/* Currently playing information */}
-                <div className="song_metadata_container">
-                    <img id="song_album" src={song.coverArt ? subsonic.getCoverArtUrl(song.coverArt) : "/currently_placeholder.png"} alt="cover" width="45" height="45" onClick={e => this.goToAlbum(song.albumId)}/>
-                    <div style={{overflow:"hidden"}}>
-                        <p id="song_name"><b>{song.title}</b></p>
-                        <span id="song_artist" className="artist-link" onClick={e => this.goToArtist(song.artistId)}>{song.artist}</span>
+            <>
+                {showFullscreen && (
+                    <FullscreenPlayer
+                        song={song}
+                        songs={songs}
+                        playing={playing}
+                        seek={seek}
+                        isShuffleOn={isShuffleOn}
+                        playbackRate={playbackRate}
+                        onClose={this.closeFullscreen}
+                        onTogglePlay={this.togglePlayerState}
+                        onPrevious={this.playPreviousSong}
+                        onNext={this.playNextSong}
+                        onToggleShuffle={this.toggleShuffle}
+                        onToggleStar={this.toggleStarOnSong}
+                        onSeek={this.onSeeking}
+                        onSeekStopped={this.onSeekingStopped}
+                        onChangePlaybackRate={this.changePlaybackRate}
+                        onSeekToSong={this.props.seekToSongInQueue}
+                        onClearQueue={this.props.clearQueue}
+                    />
+                )}
+                <div className="music-player">
+                    {/* Currently playing information */}
+                    <div className="song_metadata_container" onClick={this.toggleFullscreen} style={{cursor: "pointer"}}>
+                        <img id="song_album" src={song.coverArt ? subsonic.getCoverArtUrl(song.coverArt) : "/currently_placeholder.png"} alt="cover" width="45" height="45" onClick={e => { e.stopPropagation(); this.goToAlbum(song.albumId); }}/>
+                        <div style={{overflow:"hidden"}}>
+                            <p id="song_name"><b>{song.title}</b></p>
+                            <span id="song_artist" className="artist-link" onClick={e => { e.stopPropagation(); this.goToArtist(song.artistId); }}>{song.artist}</span>
+                        </div>
+                        <IconButton id="star_button" icon={<Icon icon={starIcon} />} onClick={e => { e.stopPropagation(); this.toggleStarOnSong(); }} appearance="link" size="lg"/>
                     </div>
-                    <IconButton id="star_button" icon={<Icon icon={starIcon} />} onClick={this.toggleStarOnSong} appearance="link" size="lg"/>
-                </div>
                 {/* Music player controls */}
                 <div className="currently_playing_controls">
                     <IconButton id="previous_button" icon={<Icon icon="step-backward" />} appearance="link" size="sm" onClick={this.playPreviousSong}/>
@@ -272,6 +306,7 @@ export default class MusicPlayer extends React.Component {
                     </div>
                 </div>
             </div>
+        </>
         )
     }
 }
@@ -281,6 +316,9 @@ MusicPlayer.propTypes = {
     playPreviousSong : PropTypes.func,
     setStarOnSongs : PropTypes.func,
     toggleShuffle : PropTypes.func,
+    seekToSongInQueue: PropTypes.func,
+    clearQueue: PropTypes.func,
     song : PropTypes.object,
+    songs: PropTypes.array,
     isShuffleOn: PropTypes.bool,
 }
