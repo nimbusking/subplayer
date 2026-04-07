@@ -2,6 +2,7 @@ import React from "react"
 // Utils
 import { seconds_to_mss, display_starred } from "../../utils/formatting.js"
 import { sortSongsByKey, filterSongsByValue } from "../../utils/utils.js"
+import { t } from "../../utils/i18n"
 import PropTypes from 'prop-types'
 import subsonic from "../../api/subsonicApi"
 // UI
@@ -195,7 +196,7 @@ export default class SongsTable extends React.Component {
                 }
                 { columnsToShow.includes(columns.title) ? 
                     <Column flexGrow={4} sortable={sortable}>
-                        <HeaderCell> Title </HeaderCell>
+                        <HeaderCell> {t("Title")} </HeaderCell>
                         <Cell dataKey="title">
                             { rowData => <p>{rowData.title} {rowData.starred && <Icon icon='star' />} <Icon icon='volume-up' className="icon-when-playing" /></p> }
                         </Cell>
@@ -204,14 +205,14 @@ export default class SongsTable extends React.Component {
 
                 { columnsToShow.includes(columns.artist) ? 
                     <Column flexGrow={3} sortable={sortable}>
-                        <HeaderCell>Artist</HeaderCell>
+                        <HeaderCell>{t("Artist")}</HeaderCell>
                         <Cell dataKey="artist" />
                     </Column> : null
                 }
 
                 { columnsToShow.includes(columns.album) ? 
                     <Column flexGrow={2} sortable={sortable}>
-                        <HeaderCell>Album</HeaderCell>
+                        <HeaderCell>{t("Album")}</HeaderCell>
                         <Cell dataKey="album" />
                     </Column>
                     : null
@@ -219,7 +220,7 @@ export default class SongsTable extends React.Component {
 
                 { columnsToShow.includes(columns.starred) ? 
                     <Column flexGrow={2} sortable={sortable}>
-                        <HeaderCell>Starred</HeaderCell>
+                        <HeaderCell>{t("Starred")}</HeaderCell>
                         <Cell dataKey="starred">
                             {rowData => display_starred(rowData.starred) }
                         </Cell>

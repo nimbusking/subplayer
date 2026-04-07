@@ -6,6 +6,7 @@ import { Howl } from 'howler'
 import subsonic from "../../api/subsonicApi"
 import { seconds_to_mss } from "../../utils/formatting.js"
 import * as settings from "../../utils/settings.js"
+import { t } from "../../utils/i18n"
 // UI
 import { IconButton, Icon, Dropdown } from 'rsuite'
 import Slider from 'rc-slider';

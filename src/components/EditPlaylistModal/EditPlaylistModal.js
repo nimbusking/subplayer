@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from 'prop-types'
 // UI
 import { Button, Modal, Form, FormGroup, ControlLabel, Input, Checkbox } from 'rsuite'
+import { t } from "../../utils/i18n"
 
 export default class EditPlaylistModal extends React.Component {
 
@@ -49,27 +50,27 @@ export default class EditPlaylistModal extends React.Component {
         return (
             <Modal {...this.props} className="subplayer-modal" backdrop="static" onHide={this.closeEditModal} size="xs">
                 <Modal.Header>
-                    <Modal.Title>Edit Playlist</Modal.Title>
+                    <Modal.Title>{t("Edit Playlist")}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form fluid onSubmit={this.closeModalAndEdit}>
                         <FormGroup>
-                            <ControlLabel>Name</ControlLabel>
+                            <ControlLabel>{t("Name")}</ControlLabel>
                             <Input id="name" name="name" defaultValue={playlist.name} onChange={(value => {this.tempPlaylist.name = value})} style={{width:"100%"}} />
-                            { this.state.editNameError ? <span id="nameErrorMessage" style={{color:"red"}}>A name is required</span> : null }
+                            { this.state.editNameError ? <span id="nameErrorMessage" style={{color:"red"}}>{t("A name is required")}</span> : null }
                         </FormGroup>
                         <FormGroup>
-                            <ControlLabel>Comment</ControlLabel>
+                            <ControlLabel>{t("Comment")}</ControlLabel>
                             <Input id="comment" name="comment" defaultValue={playlist.comment} style={{width:"100%"}} onChange={(value => {this.tempPlaylist.comment = value})} />
                         </FormGroup>
                         <FormGroup>
-                            <Checkbox id="isPublic" name="isPublic" defaultChecked={playlist.public} onChange={((value, checked) => {this.tempPlaylist.public = checked})}>Public</Checkbox>
+                            <Checkbox id="isPublic" name="isPublic" defaultChecked={playlist.public} onChange={((value, checked) => {this.tempPlaylist.public = checked})}>{t("Public")}</Checkbox>
                         </FormGroup>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button id="editButton" type="submit" appearance="primary" onClick={this.closeModalAndEdit}> Save </Button>
-                    <Button id="cancelButton" onClick={this.closeEditModal} appearance="subtle"> Cancel </Button>
+                    <Button id="editButton" type="submit" appearance="primary" onClick={this.closeModalAndEdit}> {t("Save")} </Button>
+                    <Button id="cancelButton" onClick={this.closeEditModal} appearance="subtle"> {t("Cancel")} </Button>
                 </Modal.Footer>
             </Modal>
         )

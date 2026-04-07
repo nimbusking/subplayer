@@ -5,6 +5,7 @@ import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import subsonic from "../../api/subsonicApi"
 import { seconds_to_mss } from "../../utils/formatting.js"
+import { t } from "../../utils/i18n"
 import "./FullscreenPlayer.less"
 
 const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
@@ -42,7 +43,7 @@ const FullscreenPlayer = ({
                     onClick={onClose}
                     className="close-button"
                 />
-                <span className="header-title">Now Playing</span>
+                <span className="header-title">{t("Now Playing")}</span>
                 <IconButton
                     icon={<Icon icon="ellipsis-h" />}
                     appearance="link"
@@ -115,18 +116,21 @@ const FullscreenPlayer = ({
                         appearance="link"
                         onClick={onPrevious}
                         className="control-btn"
+                        title={t("Previous")}
                     />
                     <IconButton
                         icon={<Icon icon={playing ? "pause" : "play"} />}
                         appearance="link"
                         onClick={onTogglePlay}
                         className="play-pause-btn"
+                        title={playing ? t("Pause") : t("Play")}
                     />
                     <IconButton
                         icon={<Icon icon="step-forward" />}
                         appearance="link"
                         onClick={onNext}
                         className="control-btn"
+                        title={t("Next")}
                     />
                 </div>
 
@@ -135,16 +139,17 @@ const FullscreenPlayer = ({
                     onClick={onToggleShuffle}
                     appearance="link"
                     className={`shuffle-btn ${isShuffleOn ? 'active' : ''}`}
+                    title={t("Shuffle")}
                 />
             </div>
 
             {/* Queue Section */}
             <div className="fullscreen-queue">
                 <div className="queue-header">
-                    <span className="queue-title">QUEUE</span>
+                    <span className="queue-title">{t("QUEUE")}</span>
                     <div className="queue-actions">
-                        <IconButton icon={<Icon icon="random" />} appearance="link" onClick={onToggleShuffle} className={isShuffleOn ? 'active' : ''} />
-                        <span className="clear-text" onClick={onClearQueue}>Clear</span>
+                        <IconButton icon={<Icon icon="random" />} appearance="link" onClick={onToggleShuffle} className={isShuffleOn ? 'active' : ''} title={t("Shuffle")} />
+                        <span className="clear-text" onClick={onClearQueue}>{t("Clear")}</span>
                     </div>
                 </div>
                 <div className="queue-list">

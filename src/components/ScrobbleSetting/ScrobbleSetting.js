@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react"
 import { Toggle } from 'rsuite'
 // settings
 import * as settings from "../../utils/settings"
+import { t } from "../../utils/i18n"
 
 export default function ScrobbleSetting(props) {
     const [value, setValue] = useState(true)
@@ -20,7 +21,7 @@ export default function ScrobbleSetting(props) {
 
     return (
         <div style={{...props.style, lineHeight:"2.5em"}}>
-            Scrobble? <Toggle style={{marginLeft:"10px"}} checked={value} onChange={update_settings} />
+            {t("Scrobble? ")} <Toggle style={{marginLeft:"10px"}} checked={value} onChange={update_settings} />
         </div>
     )
 }

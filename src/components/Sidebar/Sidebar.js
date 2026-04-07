@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { navigate } from "@reach/router"
 // Utils
 import * as settings from "../../utils/settings.js"
+import { t } from "../../utils/i18n"
 // UI
 import { Button, Icon, Divider, Nav } from 'rsuite'
 import SearchBar from "../SearchBar"
@@ -38,17 +39,17 @@ export default class Sidebar extends React.Component {
                 { /* Fixed-to-the-top section */ }
                 <Nav activeKey={currentPath} onSelect={this.onRouteSelected} vertical>
                     <Nav.Item panel>
-                        <h6 className="section-header">Library</h6>
+                        <h6 className="section-header">{t("Library")}</h6>
                     </Nav.Item>
                     {
                         this.itemsToDisplay.map(item => (
                             <Nav.Item key={item.key} eventKey={item.key} icon={<Icon icon={item.icon} />}>
-                                {item.text}
+                                {t(item.text)}
                             </Nav.Item>
                         ))
                     }
                     <Nav.Item panel>
-                        <h6 className="section-header">Playlists ({Object.keys(playlists).length})</h6>
+                        <h6 className="section-header">{t("Playlists")} ({Object.keys(playlists).length})</h6>
                     </Nav.Item>
                 </Nav>
                 { /* Scrollable playlists */ }
@@ -65,10 +66,10 @@ export default class Sidebar extends React.Component {
                 <Nav activeKey={currentPath} onSelect={this.onRouteSelected} vertical>
                     <Divider className="footer-divider" />
                     <Nav.Item panel>
-                        <Button id="createPlaylistButton" appearance="ghost" block={true} onClick={this.showCreatePlaylistModal} >Create new playlist</Button>
+                        <Button id="createPlaylistButton" appearance="ghost" block={true} onClick={this.showCreatePlaylistModal} >{t("Create new playlist")}</Button>
                     </Nav.Item>
                     <Nav.Item panel>
-                        <Button id="settingsButton" appearance="link" block={true} onClick={this.onShowSettings}>Settings</Button>
+                        <Button id="settingsButton" appearance="link" block={true} onClick={this.onShowSettings}>{t("Settings")}</Button>
                     </Nav.Item>
                 </Nav>
             </div>

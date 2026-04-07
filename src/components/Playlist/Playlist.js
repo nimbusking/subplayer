@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from 'prop-types'
 // Utils
 import { seconds_to_hhmmss } from "../../utils/formatting.js"
+import { t } from "../../utils/i18n"
 // UI
 import "./Playlist.less"
 import SongsTable from '../SongsTable/SongsTable'
@@ -91,13 +92,13 @@ export default class Playlist extends React.Component {
                 <div style={{ display:"flex", flexFlow: "row", padding:"20px 20px 15px 20px"}}>
                     <div style={{flexGrow:1}}>
                         <ResponsiveTitle id="title">{title} {icon}</ResponsiveTitle>
-                        <p id="details">{playlist.songCount} songs, {seconds_to_hhmmss(playlist.duration)} by <b>{playlist.owner}</b></p>
+                        <p id="details">{playlist.songCount} {t("songs, ")} {seconds_to_hhmmss(playlist.duration)} {t("by ")} <b>{playlist.owner}</b></p>
                         { playlist.comment ? <p id="comment">{`"${playlist.comment}"`}</p> : null }
                     </div>
                     {playlist.isMine ?
                         <div style={{ display:"flex", flexFlow: "column"}}>
-                            <Button id="deleteButton" color="red" onClick={this.askDeletionConfirmation} style={{marginBottom:"5px"}}>Delete playlist</Button>
-                            <Button id="removeButton" onClick={this.removeSelectedSongs} disabled={disableButton}>Remove from playlist</Button>
+                            <Button id="deleteButton" color="red" onClick={this.askDeletionConfirmation} style={{marginBottom:"5px"}}>{t("Delete playlist")}</Button>
+                            <Button id="removeButton" onClick={this.removeSelectedSongs} disabled={disableButton}>{t("Remove from playlist")}</Button>
                         </div>
                         : null
                     }

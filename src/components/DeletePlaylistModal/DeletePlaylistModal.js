@@ -3,6 +3,7 @@ import { navigate } from "@reach/router"
 import PropTypes from 'prop-types'
 // UI
 import { Button, Modal, Icon, Input } from 'rsuite'
+import { t } from "../../utils/i18n"
 
 export default class DeletePlaylistModal extends React.Component {
 
@@ -44,13 +45,13 @@ export default class DeletePlaylistModal extends React.Component {
                 <Modal.Body>
                     <Icon icon="remind" style={{ color: '#ffb300', fontSize: 24 }} />
                     {'  '}
-                    Once a playlist is deleted, it can't be recovered. If you want to proceed, write the name of the playlist "<b>{playlistToDelete.name}</b>":
+                    {t("Once a playlist is deleted, it can't be recovered. If you want to proceed, write the name of the playlist")} "<b>{playlistToDelete.name}</b>":
                     <Input id="confirm_name" name="confirm_name" onChange={(value => {this.confirmation_name = value})} style={{width:"100%", marginTop:"10px"}} />
-                    {this.state.deleteNameError ? <span id="errorMessage" style={{color:"red"}}>Name does not match</span> : null}
+                    {this.state.deleteNameError ? <span id="errorMessage" style={{color:"red"}}>{t("Name does not match")}</span> : null}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button id="deleteButton" onClick={this.closeModalAndDelete} appearance="primary"> Ok </Button>
-                    <Button id="cancelButton" onClick={this.closeDeleteModal} appearance="subtle"> Cancel </Button>
+                    <Button id="deleteButton" onClick={this.closeModalAndDelete} appearance="primary"> {t("Ok")} </Button>
+                    <Button id="cancelButton" onClick={this.closeDeleteModal} appearance="subtle"> {t("Cancel")} </Button>
                 </Modal.Footer>
             </Modal>
         )

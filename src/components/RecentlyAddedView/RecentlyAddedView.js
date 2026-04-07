@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from 'prop-types'
 // Utils
 import subsonic from "../../api/subsonicApi"
+import { t } from "../../utils/i18n"
 // UI
 import { Grid, Row, Col } from 'rsuite'
 import AlbumResult from "../SearchAlbumResult"
@@ -34,7 +35,7 @@ export default class RecentlyAddedView extends React.Component {
             <Grid fluid style={{padding: "20px"}}>
                 <Row>
                     <Col md={24} lg={24}>
-                        <h1 style={{fontWeight:"bold", display: "inline-block"}}>Recently Added</h1>
+                        <h1 style={{fontWeight:"bold", display: "inline-block"}}>{t("Recently Added")}</h1>
                     </Col>
                     <Col md={24} className="result-grid-container" >
                         { albums.map(a => 

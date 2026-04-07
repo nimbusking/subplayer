@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { navigate } from "@reach/router"
 // UI
 import { Panel, Button, Form, FormGroup, FormControl, ControlLabel, HelpBlock, Alert } from 'rsuite'
+import { t } from "../../utils/i18n"
 
 export default class LoginView extends React.Component {
 
@@ -81,20 +82,20 @@ export default class LoginView extends React.Component {
                 <Panel bordered shaded>
                     <Form onChange={this.onUserDataChange} onSubmit={this.login}>
                         <FormGroup>
-                            <ControlLabel>Host</ControlLabel>
+                            <ControlLabel>{t("Server Address")}</ControlLabel>
                             <FormControl name="host" type="url" errorMessage={this.state.hostErrorMessage} errorPlacement="bottomStart"/>
                             <HelpBlock>http://HOST:PORT</HelpBlock>
                         </FormGroup>
                         <FormGroup>
-                            <ControlLabel>Username</ControlLabel>
+                            <ControlLabel>{t("Username")}</ControlLabel>
                             <FormControl name="username" errorMessage={this.state.userErrorMessage} errorPlacement="bottomStart"/>
                         </FormGroup>
                         <FormGroup>
-                            <ControlLabel>Password</ControlLabel>
+                            <ControlLabel>{t("Password")}</ControlLabel>
                             <FormControl name="password" type="password" errorMessage={this.state.passwordErrorMessage} errorPlacement="bottomStart"/>
                         </FormGroup>
                         <FormGroup>
-                            <Button type="submit" appearance="primary" loading={this.state.isAuthenticating} block>Log In</Button>
+                            <Button type="submit" appearance="primary" loading={this.state.isAuthenticating} block>{t("Login")}</Button>
                         </FormGroup>
                       </Form>
                   </Panel>

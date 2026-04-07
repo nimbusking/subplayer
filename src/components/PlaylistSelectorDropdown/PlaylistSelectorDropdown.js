@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from 'prop-types'
 // UI
 import { Dropdown, Icon } from 'rsuite'
+import { t } from "../../utils/i18n"
 
 export default class PlaylistSelectorDropdown extends React.Component {
 
@@ -29,15 +30,15 @@ export default class PlaylistSelectorDropdown extends React.Component {
         const showFavourites = this.props.showFavourites
         const showQueue = this.props.showQueue
         return (
-            <Dropdown id="selectDropdown" title="Add to ..." trigger="click" onSelect={this.onItemSelected} disabled={this.props.disabled} placement="bottomEnd" >
+            <Dropdown id="selectDropdown" title={t("Add to ...")} trigger="click" onSelect={this.onItemSelected} disabled={this.props.disabled} placement="bottomEnd" >
                 {
                     showFavourites ? 
-                        <Dropdown.Item id="favourites_item" eventKey={this.favourites_key} icon={<Icon icon="star" />}>Favourites</Dropdown.Item>
+                        <Dropdown.Item id="favourites_item" eventKey={this.favourites_key} icon={<Icon icon="star" />}>{t("Favourites")}</Dropdown.Item>
                         : null
                 }
                 {
                     showQueue ? 
-                        <Dropdown.Item id="queue_item" eventKey={this.queue_key} icon={<Icon icon="bars" />}>Queue</Dropdown.Item>
+                        <Dropdown.Item id="queue_item" eventKey={this.queue_key} icon={<Icon icon="bars" />}>{t("Queue")}</Dropdown.Item>
                         : null
                 }
                 {

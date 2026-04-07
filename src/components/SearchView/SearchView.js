@@ -7,6 +7,7 @@ import SongsResult from "../SearchSongResult"
 // UI
 import SearchBar from "../SearchBar"
 import { Col } from 'rsuite'
+import { t } from "../../utils/i18n"
 
 export default class SearchView extends React.Component {
 
@@ -23,7 +24,7 @@ export default class SearchView extends React.Component {
                 {
                     /* Case where there are no results */
                     (artists.length === 0 && albums.length === 0 && songs.length === 0)
-                    ? <h1>No results</h1>
+                    ? <h1>{t("No results found")}</h1>
                     : null
                 }
 
@@ -31,7 +32,7 @@ export default class SearchView extends React.Component {
                     /* Artists section */
                     artists.length > 0 ? 
                         <React.Fragment>
-                            <h1 style={{display:"contents"}}>Artists</h1>
+                            <h1 style={{display:"contents"}}>{t("Artists")}</h1>
                             <div style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
                                 { artists.map( a => <ArtistElement key={a.id} artist={a}/> )}
                             </div>
@@ -42,7 +43,7 @@ export default class SearchView extends React.Component {
                 {
                     albums.length > 0 ? (
                         <React.Fragment>
-                            <h1 style={{display:"contents"}}>Albums</h1>
+                            <h1 style={{display:"contents"}}>{t("Albums")}</h1>
                             <div className="result-grid-container" >
                                 { albums.map(a => 
                                     <div key={a.id} className="result-item">
@@ -57,7 +58,7 @@ export default class SearchView extends React.Component {
                 {
                     songs.length > 0 ? (
                         <React.Fragment>
-                            <h1 style={{display:"contents"}}>Songs</h1>
+                            <h1 style={{display:"contents"}}>{t("Songs")}</h1>
                             <SongsResult songs={songs} />
                         </React.Fragment>
                     ) : null

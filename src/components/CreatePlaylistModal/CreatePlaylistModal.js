@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 // UI
 import { Button, Modal, Form, FormGroup, FormControl, ControlLabel } from 'rsuite'
+import { t } from "../../utils/i18n"
 
 export default class CreatePlaylistModal extends React.Component {
 
@@ -26,7 +27,7 @@ export default class CreatePlaylistModal extends React.Component {
             this.closeModal()
         }
         else {
-            this.setState({playlistNameErrorMessage : "Name required"})
+            this.setState({playlistNameErrorMessage : t("Name required")})
         }
     }
 
@@ -40,19 +41,19 @@ export default class CreatePlaylistModal extends React.Component {
         return (
             <Modal id="modal" backdrop="static" show={this.props.showModal} onHide={this.closeModal} size="xs">
                 <Modal.Header>
-                    <Modal.Title>New Playlist</Modal.Title>
+                    <Modal.Title>{t("New Playlist")}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form fluid onChange={this.onPlaylistFormChange}>
                         <FormGroup>
-                            <ControlLabel>Name</ControlLabel>
+                            <ControlLabel>{t("Name")}</ControlLabel>
                             <FormControl name="name" errorMessage={this.state.playlistNameErrorMessage} errorPlacement="bottomStart" onKeyDown={this.handleKeyDown} />
                         </FormGroup>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button id="create_playlist" onClick={this.closeModalAndCreate} appearance="primary"> Create </Button>
-                    <Button id="close" onClick={this.closeModal} appearance="subtle"> Cancel </Button>
+                    <Button id="create_playlist" onClick={this.closeModalAndCreate} appearance="primary"> {t("Create")} </Button>
+                    <Button id="close" onClick={this.closeModal} appearance="subtle"> {t("Cancel")} </Button>
                 </Modal.Footer>
             </Modal>    
         )

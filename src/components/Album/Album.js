@@ -4,6 +4,7 @@ import { navigate } from "@reach/router"
 // Utils
 import subsonic from "../../api/subsonicApi"
 import { seconds_to_hhmmss } from "../../utils/formatting.js"
+import { t } from "../../utils/i18n"
 // UI
 import { Grid, Row, Col, Panel, IconButton, Icon } from 'rsuite'
 import SongsTable from '../SongsTable/SongsTable'
@@ -32,10 +33,10 @@ export default function Album(props) {
                     <Col smHidden xsHidden md={6} lg={6}>
                         <img src={album.coverArt ? subsonic.getCoverArtUrl(album.coverArt) : "/currently_placeholder.png"} alt="Album Cover" width="100%" style={{marginBottom:"5px"}} />
                         <IconButton id="starAlbumLG" icon={<Icon icon="star" />} circle size="lg" style={{marginTop:"-30px", marginRight:"10px", float:"right"}} appearance={starStyle} onClick={starThisAlbum}/>
-                        {linkArtist && <p><strong>By: </strong> <span className="artist-link" onClick={e => goToArtist(album.artistId)}>{album.artist}</span> </p> }
-                        <p><strong>Genre: </strong> {album.genre} </p>
-                        <p><strong>Songs: </strong> {album.songCount} ({seconds_to_hhmmss(album.duration)}) </p>
-                        <p><strong>Year: </strong> {album.year} </p>
+                        {linkArtist && <p><strong>{t("By: ")}</strong> <span className="artist-link" onClick={e => goToArtist(album.artistId)}>{album.artist}</span> </p> }
+                        <p><strong>{t("Genre: ")}</strong> {album.genre} </p>
+                        <p><strong>{t("Songs: ")}</strong> {album.songCount} ({seconds_to_hhmmss(album.duration)}) </p>
+                        <p><strong>{t("Year: ")}</strong> {album.year} </p>
                     </Col>
                     <Col sm={24} md={18} style={{paddingLeft:"10px"}}>
                         <h2 id="albumHeader">

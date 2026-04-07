@@ -47,6 +47,18 @@ export function setShuffle(value) {
 	localStorage.setItem('is_shuffling', value)
 }
 
+/* Language Settings */
+const DEFAULT_LANGUAGE = 'zh'
+
+export function getLanguage() {
+	const value = localStorage.getItem('language')
+	return value !== null ? value : DEFAULT_LANGUAGE
+}
+
+export function setLanguage(value) {
+	localStorage.setItem('language', value)
+}
+
 /* Sidebar settings */
 export const POSSIBLE_SIDEBAR_LINKS = [
     {key:"/latest" , icon: "clock-o", text:"Recently Added"},
