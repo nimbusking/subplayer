@@ -1,3 +1,8 @@
+<h3>A simple web player based on Subsonic backend</h3>
+
+
+English | [简体中文](./readme/README_cn.md)
+
 # Subplayer
 
 [![codecov](https://codecov.io/gh/peguerosdc/subplayer/branch/master/graph/badge.svg)](https://codecov.io/gh/peguerosdc/subplayer)
