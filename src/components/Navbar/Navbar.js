@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { navigate } from "@reach/router"
 // Utils
 import * as settings from "../../utils/settings.js"
+import { t } from "../../utils/i18n"
 // UI
 import {Navbar, Icon, Nav, Dropdown } from 'rsuite'
 
@@ -32,17 +33,17 @@ export default class MyNavbar extends React.Component {
                 <Navbar.Body>
                     <Nav activeKey={currentPath} onSelect={this.onNavSelected}>
                         <Nav.Item id="search" eventKey="/search" icon={<Icon icon="search" />} />
-                        <Dropdown id="library" title="Library">
+                        <Dropdown id="library" title={t("Library")}>
                             {
                                 this.itemsToDisplay.map(item => (
                                     <Dropdown.Item key={item.key} eventKey={item.key} icon={<Icon icon={item.icon} />}>
-                                        {item.text}
+                                        {t(item.text)}
                                     </Dropdown.Item>
                                 ))
                             }
                         </Dropdown>
-                        <Dropdown id="playlists" title="Playlists">
-                            <Dropdown.Item id="createPlaylist" eventKey="newPlaylist" icon={<Icon icon="plus" />} >New playlist</Dropdown.Item>
+                        <Dropdown id="playlists" title={t("Playlists")}>
+                            <Dropdown.Item id="createPlaylist" eventKey="newPlaylist" icon={<Icon icon="plus" />} >{t("New Playlist")}</Dropdown.Item>
                             {Object.keys(playlists).map( id =>
                                 <Dropdown.Item key={id} eventKey={`/playlist/${id}`}>{playlists[id].name} ({playlists[id].songCount})</Dropdown.Item>
                             )}

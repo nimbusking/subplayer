@@ -8,8 +8,6 @@ import SongsTable from '../SongsTable/SongsTable'
 const SONG_COLUMNS_TO_SHOW = [
     SongsTable.columns.selectable, 
     SongsTable.columns.title, 
-    SongsTable.columns.artist, 
-    SongsTable.columns.album, 
     SongsTable.columns.duration, 
     SongsTable.columns.download
 ]
