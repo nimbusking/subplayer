@@ -61,6 +61,7 @@ export function setLanguage(value) {
 
 /* Sidebar settings */
 export const POSSIBLE_SIDEBAR_LINKS = [
+    {key:"/all-songs" , icon: "music", text:"All Songs"},
     {key:"/latest" , icon: "clock-o", text:"Recently Added"},
     {key:"/artists" , icon: "group", text:"Artists"},
     {key:"/album" , icon: "th2", text:"Albums"},

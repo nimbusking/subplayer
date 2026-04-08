@@ -20,6 +20,7 @@ import FavouritesView from './components/FavouritesView'
 import Queue from './components/QueueView'
 import AlertsManager from './components/AlertsManager'
 import RecentlyAdded from './components/RecentlyAddedView'
+import AllSongsView from './components/AllSongsView'
 import Settings from './components/SettingsView'
 import GenresView from './components/GenresView'
 // import main styles
@@ -59,7 +60,7 @@ export class App extends React.Component  {
           </Sidebar>
           <Content className="main-content" style={{"overflow":"auto"}}>
             <Router style={{height:"100%"}}>
-                <RecentlyAdded path="/latest" default/>
+                <RecentlyAdded path="/latest" />
                 <ArtistsList path="/artists"/>
                 <Artist path="/artists/:artistId"/>
                 <AlbumsList path="/album"/>
@@ -67,6 +68,7 @@ export class App extends React.Component  {
                 <Playlist path="/playlist/:playlistId"/>
                 <SearchView path="/search"/>
                 <FavouritesView path="/favourites" />
+                <AllSongsView path="/all-songs" default />
                 <Queue path="/queue" />
                 <Settings path="/settings" />
                 <GenresView path="/genres" />

@@ -6,6 +6,7 @@ const translations = {
         "Artists": "艺术家",
         "Albums": "专辑",
         "Genres": "流派",
+        "All Songs": "所有歌曲",
         "Favourites": "我的收藏",
         "Library": "音乐库",
         "Playlists": "播放列表",
@@ -87,12 +88,18 @@ const translations = {
         "Add to ...": "添加到...",
         "Queue": "队列",
         "Ok": "确定",
+        "Songs per page": "每页歌曲数",
+        "Total: ": "总计: ",
+        "Page: ": "页码: ",
+        "Previous Page": "上一页",
+        "Next Page": "下一页",
     },
     en: {
         "Recently Added": "Recently Added",
         "Artists": "Artists",
         "Albums": "Albums",
         "Genres": "Genres",
+        "All Songs": "All Songs",
         "Favourites": "Favourites",
         "Library": "Library",
         "Playlists": "Playlists",
@@ -172,6 +179,11 @@ const translations = {
         "Add to ...": "Add to ...",
         "Queue": "Queue",
         "Ok": "Ok",
+        "Songs per page": "Songs per page",
+        "Total: ": "Total: ",
+        "Page: ": "Page: ",
+        "Previous Page": "Previous Page",
+        "Next Page": "Next Page",
     }
 }
 

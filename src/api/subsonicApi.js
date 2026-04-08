@@ -222,6 +222,19 @@ class Subsonic {
             }) 
     }
 
+    getSongs(offset = 0, count = 50, query = "*") {
+        return perform_api_call( buildUrl(this.config, "search3", {
+            query: query,
+            songCount: count,
+            songOffset: offset,
+            artistCount: 0,
+            albumCount: 0
+        }) )
+        .then(result => {
+            return result["searchResult3"]["song"] || []
+        })
+    }
+
     getGenres() {
         return perform_api_call( buildUrl(this.config, "getGenres") )
             .then(result => {
