@@ -3,26 +3,29 @@
 
 // Default configuration
 var defaults = {
-    host : null,
-    user : null,
-    password : null,
+    host : "/api", // 默认指向代理路径
     version : "1.9.0"
 }
 
 // Define utils and helpers
 function buildUrl(config, action, params = {}) {
-    var base = `${config.host}/rest/${action}.view?u=${config.user}&p=${config.password}&v=${config.version}&f=json&c=myplayer`
-    // Check if there are multiple valued keys
+    // 代理模式下，不需要在前端拼接 u, p, v, f 等参数，由后端统一处理
+    var base = `${config.host}/${action}`
+    
     const keys = Object.keys(params)
-    for (var i = keys.length - 1; i >= 0; i--) {
-        const key = keys[i]
-        const value = params[key]
-        if( Array.isArray(value) ) {
-            // If an element has multiple values, add one key for each value
-            base += value.map(val => `&${key}=${encodeURIComponent(val)}`).join("")
-        }
-        else {
-            base += `&${key}=${encodeURIComponent(value)}`
+    if (keys.length > 0) {
+        base += "?"
+        for (var i = 0; i < keys.length; i++) {
+            const key = keys[i]
+            const value = params[key]
+            if (i > 0) base += "&"
+            
+            if( Array.isArray(value) ) {
+                base += value.map(val => `${key}=${encodeURIComponent(val)}`).join("&")
+            }
+            else {
+                base += `${key}=${encodeURIComponent(value)}`
+            }
         }
     }
     return base
@@ -40,6 +43,7 @@ function perform_api_call(url) {
         .then(data => {
             // Get subsonic response
             const response = data["subsonic-response"]
+            if (!response) return data; // 兼容直接返回数据的情况
             return response["status"] === "ok" ?
                 response :
                 Promise.reject(new Error(`${response.error.message}`))
@@ -53,35 +57,18 @@ class Subsonic {
         this.config = config
     }
 
-    setConfig(host, username, password, encodePassword = true) {
+    // 免登录模式下，setConfig 仅用于修改代理地址
+    setConfig(host) {
         this.config = Object.assign(this.config, {
-            host : host,
-            user : username,
-            password : `enc:${encodePassword ? this.getEncodedPassword(password) : password}`,
+            host : host || "/api"
         })
     }
 
-    login(host, username, password, encodePassword = true) {
-        // Perform call
-        const tempConfig = {
-            host : host,
-            user : username,
-            password : `enc:${encodePassword ? this.getEncodedPassword(password) : password}`,
-            version : "1.9.0"
-        }
-        return perform_api_call( buildUrl(tempConfig, "ping") )
-            .then(result => {
-                return result["status"] === "ok"
-            })
-    }
-
-    getEncodedPassword(password) {
-        let encoded = ""
-        for (var i=0; i<password.length; i++) {
-            let hex = password.charCodeAt(i).toString(16);
-            encoded += (hex).slice(-4);
-        }
-        return encoded
+    // 免登录模式下，login 始终返回 true 或通过 ping 代理检查
+    login() {
+        return perform_api_call( buildUrl(this.config, "ping") )
+            .then(() => true)
+            .catch(() => true) // 即使失败也允许进入，由后续请求决定
     }
     
     getArtists() {

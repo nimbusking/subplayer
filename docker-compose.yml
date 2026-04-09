@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # 前端服务 (Nginx)
+  subplayer-frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: subplayer-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - subplayer-backend
+    restart: unless-stopped
+    networks:
+      - subplayer-net
+
+  # 后端代理服务 (Node.js)
+  subplayer-backend:
+    build: 
+      context: ./deploy/backend
+      dockerfile: Dockerfile
+    container_name: subplayer-backend
+    environment:
+      - SUBSONIC_URL=${SUBSONIC_URL}
+      - SUBSONIC_USER=${SUBSONIC_USER}
+      - SUBSONIC_PASS=${SUBSONIC_PASS}
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - subplayer-net
+
+networks:
+  subplayer-net:
+    driver: bridge

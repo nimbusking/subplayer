@@ -146,7 +146,34 @@ $ docker run --name mysubplayer \
 
 ---
 
-## 8. 鸣谢与许可
+## 9. 免登录代理模式 (Proxy Mode)
+
+为了在不暴露 Subsonic 账号凭据的情况下实现“免登录”访问，该分支已将 API 请求逻辑改造为**代理模式**。
+
+### 9.1 工作原理
+1.  **前端**: 不再直接拼接 `u` (用户名), `p` (密码) 等敏感参数。所有请求统一发送至 `/api` 前缀。
+2.  **后端 (需单独实现)**: 搭建一个中转服务器（Proxy），持有真实的 Subsonic 凭据。它接收来自前端的请求，自动补全认证参数并转发给 Subsonic 服务器，最后将结果回传。
+
+### 9.2 API 变更汇总
+在代理模式下，前端发出的请求格式如下：
+
+| 功能 | 原始 Subsonic API (示例) | 改造后的代理 API (前端发出) |
+| :--- | :--- | :--- |
+| **Ping 测试** | `/rest/ping.view?u=..&p=..` | `/api/ping` |
+| **获取艺术家** | `/rest/getArtists.view?u=..` | `/api/getArtists` |
+| **获取专辑** | `/rest/getAlbum.view?id=123` | `/api/getAlbum?id=123` |
+| **流媒体播放** | `/rest/stream.view?id=456` | `/api/stream?id=456` |
+| **封面图片** | `/rest/getCoverArt.view?id=789` | `/api/getCoverArt?id=789` |
+| **搜索** | `/rest/search3.view?query=abc` | `/api/search3?query=abc` |
+
+**优势：**
+*   **安全性**: 敏感凭据（密码/Token）仅存在于后端，不会通过浏览器泄露。
+*   **简洁性**: 前端代码不再需要处理登录逻辑、密码加密或 Token 盐值。
+*   **可控性**: 后端代理可以轻松实现流量限制、IP 白名单或只读控制。
+
+---
+
+## 10. 鸣谢与许可
 
 - Favicon 由 www.flaticon.com 的 Freepik 制作。
 - 使用 [rsuite/rsuite](https://github.com/rsuite/rsuite) UI 组件。
