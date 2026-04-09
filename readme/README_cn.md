@@ -59,14 +59,16 @@ src/
 - **播放倍速调整 (新增)**: 支持 0.5x 到 2.0x 调节，自动持久化。
 - **所有歌曲分页查询 (新增)**: 支持全量歌曲检索，服务端分页，极大提升性能。
 - **完善的国际化 (新增)**: 完整的全界面中英文适配。
-- **优化多平台页面适配（优化）**：已对手机端尽量适配
+- **优化多平台页面适配（优化）**：已对手机端尽量适配。
+- **歌曲标题滚动显示 (新增)**: 正在播放的歌曲标题支持左右滚动（跑马灯效果），方便查看长标题。
+- **简洁列表视图 (优化)**: 默认隐藏了歌曲时长列和总时长统计，使界面更加清爽。
 
 ---
 
 ## 3. 核心模块分析
 
 ### 3.1 数据交互层 (src/api/)
-*   **subsonicApi.js**: 封装了所有与 Subsonic 兼容服务器的通信逻辑。包括身份验证、元数据获取、播放列表管理、媒体资源获取及收藏评分等。
+*   **subsonicApi.js**: 封装了所有与 Subsonic 兼容服务器的通信逻辑。支持双模式（STANDALONE / PROXY）切换，自动处理鉴权参数或代理转发。
 
 ### 3.2 状态管理层 (src/redux/)
 *   管理用户登录状态、音乐播放器状态（播放列表、索引、状态、倍速）、音乐元数据缓存、用户播放列表数据及全局异步任务跟踪。
@@ -146,34 +148,56 @@ $ docker run --name mysubplayer \
 
 ---
 
-## 9. 免登录代理模式 (Proxy Mode)
+## 9. 运行模式与代理 (Modes & Proxy)
 
-为了在不暴露 Subsonic 账号凭据的情况下实现“免登录”访问，该分支已将 API 请求逻辑改造为**代理模式**。
+本项目现在支持两种运行模式，通过环境变量 `REACT_APP_MODE` 进行切换。
 
-### 9.1 工作原理
-1.  **前端**: 不再直接拼接 `u` (用户名), `p` (密码) 等敏感参数。所有请求统一发送至 `/api` 前缀。
-2.  **后端 (需单独实现)**: 搭建一个中转服务器（Proxy），持有真实的 Subsonic 凭据。它接收来自前端的请求，自动补全认证参数并转发给 Subsonic 服务器，最后将结果回传。
+### 9.1 运行模式对比
 
-### 9.2 API 变更汇总
-在代理模式下，前端发出的请求格式如下：
+| 模式 | 配置值 | 说明 | 鉴权逻辑 |
+| :--- | :--- | :--- | :--- |
+| **标准模式** | `STANDALONE` | 传统的账号密码登录模式。 | 前端通过 MD5 Token/Salt 鉴权。 |
+| **代理模式** | `PROXY` | 预配置模式，跳过登录界面。 | 前端不持有凭据，由后端代理服务器处理。 |
 
-| 功能 | 原始 Subsonic API (示例) | 改造后的代理 API (前端发出) |
-| :--- | :--- | :--- |
-| **Ping 测试** | `/rest/ping.view?u=..&p=..` | `/api/ping` |
-| **获取艺术家** | `/rest/getArtists.view?u=..` | `/api/getArtists` |
-| **获取专辑** | `/rest/getAlbum.view?id=123` | `/api/getAlbum?id=123` |
-| **流媒体播放** | `/rest/stream.view?id=456` | `/api/stream?id=456` |
-| **封面图片** | `/rest/getCoverArt.view?id=789` | `/api/getCoverArt?id=789` |
-| **搜索** | `/rest/search3.view?query=abc` | `/api/search3?query=abc` |
+### 9.2 代理模式 (Proxy Mode) 工作原理
+1.  **前端**: 请求统一发送至 `/api` 前缀，不带敏感参数。
+2.  **后端**: 配合项目中的 `deploy/backend` 服务，持有真实的 Subsonic 凭据并完成转发。
 
-**优势：**
-*   **安全性**: 敏感凭据（密码/Token）仅存在于后端，不会通过浏览器泄露。
-*   **简洁性**: 前端代码不再需要处理登录逻辑、密码加密或 Token 盐值。
-*   **可控性**: 后端代理可以轻松实现流量限制、IP 白名单或只读控制。
+### 9.3 环境变量配置 (`.env`)
+
+```bash
+# 模式选择 (STANDALONE 或 PROXY)
+REACT_APP_MODE=PROXY
+
+# --- 仅 PROXY 模式后端需要 ---
+SUBSONIC_URL=http://your-server:4040
+SUBSONIC_USER=admin
+SUBSONIC_PASS=password
+```
 
 ---
 
-## 10. 鸣谢与许可
+## 10. 部署与优化
+
+### 10.1 Docker Compose 部署
+推荐使用 `docker-compose.yml` 进行一键部署，支持前端 Nginx 和后端 Proxy 的联动。
+
+### 10.2 外部资源映射
+可以通过卷映射（Volumes）自定义网站图标等资源：
+```yaml
+volumes:
+  - ./public/favicon.ico:/usr/share/nginx/html/favicon.ico
+```
+
+### 10.3 流媒体优化 (Nginx)
+内置的 Nginx 配置已针对长音频流进行优化：
+*   **超长超时**: `proxy_read_timeout` 已延长至 3 小时，防止大文件播放中断。
+*   **字符集**: 显式设置 `charset utf-8`，解决 Linux/群晖环境下的中文乱码问题。
+*   **分块传输**: 启用 `chunked_transfer_encoding` 保证流式播放稳定性。
+
+---
+
+## 11. 鸣谢与许可
 
 - Favicon 由 www.flaticon.com 的 Freepik 制作。
 - 使用 [rsuite/rsuite](https://github.com/rsuite/rsuite) UI 组件。
