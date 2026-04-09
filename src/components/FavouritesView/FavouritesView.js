@@ -1,19 +1,17 @@
 import React from "react"
 import PropTypes from 'prop-types'
-// Utils
-import { seconds_to_hhmmss } from "../../utils/formatting.js"
 // UI
 import SongsTableEnhanced from '../SongsTableEnhanced'
 import { Button } from 'rsuite'
 import SongsTable from '../SongsTable/SongsTable'
 
-const COLUMNS_TO_SHOW = [SongsTable.columns.selectable, SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.download, SongsTable.columns.starred]
+const COLUMNS_TO_SHOW = [SongsTable.columns.selectable, SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.download, SongsTable.columns.starred]
 
 export default class FavouritesView extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { selectedSongs : [], duration : 0 }
+        this.state = { selectedSongs : [] }
     }
 
     componentDidMount() {
@@ -22,7 +20,7 @@ export default class FavouritesView extends React.Component {
 
     componentDidUpdate(prevProps) {
         if( prevProps.songs.length !== this.props.songs.length ) {
-            this.setState({selectedSongs: [], duration : this.props.songs.reduce( (a,b) => ({duration: a.duration+b.duration}), {duration:0} ).duration})
+            this.setState({selectedSongs: []})
         }
     }
 
@@ -40,14 +38,13 @@ export default class FavouritesView extends React.Component {
 
     render() {
         const songs = this.props.songs
-        const duration = this.state.duration
         const disableButton = this.state.selectedSongs && this.state.selectedSongs.length === 0
         return (
             <div style={{display:"flex", flexFlow:"column", padding:"20px", height:"100%", width:"100%" }}>
                 <div style={{ display:"flex", flexFlow: "row", marginBottom:"15px"}}>
                     <div style={{flexGrow:1}}>
                         <h1 style={{fontWeight: "bold"}}>Favourites</h1>
-                        <span id="description">{ songs.length } songs, {seconds_to_hhmmss(duration)}</span>
+                        <span id="description">{ songs.length } songs</span>
                     </div>
                     <div style={{ display:"flex", flexFlow: "column"}}>
                         <Button id="removeFromFavourites" onClick={this.removeSelectedSongs} disabled={disableButton}>Remove from favourites</Button>

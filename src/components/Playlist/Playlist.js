@@ -12,7 +12,7 @@ import EditPlaylistModal from '../EditPlaylistModal'
 import ResponsiveTitle from '../ResponsiveTitle' 
 import { Button, Icon, IconButton } from 'rsuite'
 
-const NOT_MINE_COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.download]
+const NOT_MINE_COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.download]
 const MINE_COLUMNS_TO_SHOW = [...NOT_MINE_COLUMNS_TO_SHOW, SongsTable.columns.selectable]
 
 export default class Playlist extends React.Component {
@@ -92,7 +92,7 @@ export default class Playlist extends React.Component {
                 <div style={{ display:"flex", flexFlow: "row", padding:"20px 20px 15px 20px"}}>
                     <div style={{flexGrow:1}}>
                         <ResponsiveTitle id="title">{title} {icon}</ResponsiveTitle>
-                        <p id="details">{playlist.songCount} {t("songs, ")} {seconds_to_hhmmss(playlist.duration)} {t("by ")} <b>{playlist.owner}</b></p>
+                        <p id="details">{playlist.songCount} {t("songs by ")} <b>{playlist.owner}</b></p>
                         { playlist.comment ? <p id="comment">{`"${playlist.comment}"`}</p> : null }
                     </div>
                     {playlist.isMine ?

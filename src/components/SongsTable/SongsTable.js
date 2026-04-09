@@ -292,7 +292,7 @@ SongsTable.propTypes = {
 SongsTable.columns = columns
 
 // Defaults
-const defaultColumns = ["title", "artist", "album", "duration", "selectable", "download"]
+const defaultColumns = ["title", "artist", "album", "selectable", "download"]
 SongsTable.defaultProps = {
     height : -1,
     sortable : false,

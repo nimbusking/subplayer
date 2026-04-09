@@ -1,7 +1,5 @@
 import React from "react"
 import PropTypes from 'prop-types'
-// Utils
-import { seconds_to_hhmmss } from "../../utils/formatting.js"
 // UI
 import "./QueueView.less"
 import SongsTable from '../SongsTable/SongsTable'
@@ -9,7 +7,7 @@ import SongsTableEnhanced from '../SongsTableEnhanced'
 import { Button, IconButton, Icon } from 'rsuite'
 import ResponsiveTitle from '../ResponsiveTitle' 
 
-const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.selectable, SongsTable.columns.download]
+const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.artist, SongsTable.columns.album, SongsTable.columns.selectable, SongsTable.columns.download]
 
 export default class QueueView extends React.Component {
 
@@ -36,14 +34,13 @@ export default class QueueView extends React.Component {
 
     render() {
         const songs = this.props.songs
-        const duration = songs.reduce( (accum, current) => accum + current.duration, 0 )
         const disableButton = this.state.selectedSongs && this.state.selectedSongs.length === 0
         return (
             <div style={{display:"flex", flexFlow:"column", height:"100%", width:"100%"}}>
                 <div style={{ display:"flex", flexFlow: "row", padding:"20px 20px 15px 20px"}}>
                     <div style={{flexGrow:1}}>
                         <ResponsiveTitle>Playing Queue</ResponsiveTitle>
-                        <p id="details">{songs.length} songs, {seconds_to_hhmmss(duration)}</p>
+                        <p id="details">{songs.length} songs</p>
                     </div>
                     <div style={{ display:"flex", flexFlow: "column"}}>
                         <IconButton id="clear_button" onClick={this.clearQueue} style={{marginBottom:"5px"}} placement="right" icon={<Icon icon="trash"/>}>Clear</IconButton>

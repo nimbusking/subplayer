@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import SongsTable from '../SongsTable/SongsTable'
 import SongsTableEnhanced from '../SongsTableEnhanced'
 
-const SONG_COLUMNS_TO_SHOW = [SongsTable.columns.selectable, SongsTable.columns.title, SongsTable.columns.duration, SongsTable.columns.download]
+const SONG_COLUMNS_TO_SHOW = [SongsTable.columns.selectable, SongsTable.columns.title, SongsTable.columns.download]
 
 export default function SearchSongResult(props) {
     const songs = props.songs

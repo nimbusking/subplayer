@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import SongsTableEnhanced from '../SongsTableEnhanced'
 import SongsTable from '../SongsTable/SongsTable'
 
-const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.album, SongsTable.columns.duration, SongsTable.columns.selectable, SongsTable.columns.download]
+const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.album, SongsTable.columns.selectable, SongsTable.columns.download]
 
 export default function ArtistAllSongs(props) {
     const songs = props.songs

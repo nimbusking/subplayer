@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { navigate } from "@reach/router"
 // Utils
 import subsonic from "../../api/subsonicApi"
-import { seconds_to_hhmmss } from "../../utils/formatting.js"
 import { t } from "../../utils/i18n"
 // UI
 import { Grid, Row, Col, Panel, IconButton, Icon } from 'rsuite'
@@ -11,7 +10,7 @@ import SongsTable from '../SongsTable/SongsTable'
 import SongsTableEnhanced from '../SongsTableEnhanced'
 import "./Album.less"
 
-const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.duration, SongsTable.columns.selectable, SongsTable.columns.download]
+const COLUMNS_TO_SHOW = [SongsTable.columns.title, SongsTable.columns.selectable, SongsTable.columns.download]
 
 export default function Album(props) {
     const { album, songs, style, starAlbums, linkArtist } = props
@@ -35,7 +34,7 @@ export default function Album(props) {
                         <IconButton id="starAlbumLG" icon={<Icon icon="star" />} circle size="lg" style={{marginTop:"-30px", marginRight:"10px", float:"right"}} appearance={starStyle} onClick={starThisAlbum}/>
                         {linkArtist && <p><strong>{t("By: ")}</strong> <span className="artist-link" onClick={e => goToArtist(album.artistId)}>{album.artist}</span> </p> }
                         <p><strong>{t("Genre: ")}</strong> {album.genre} </p>
-                        <p><strong>{t("Songs: ")}</strong> {album.songCount} ({seconds_to_hhmmss(album.duration)}) </p>
+                        <p><strong>{t("Songs: ")}</strong> {album.songCount}</p>
                         <p><strong>{t("Year: ")}</strong> {album.year} </p>
                     </Col>
                     <Col sm={24} md={18} style={{paddingLeft:"10px"}}>
