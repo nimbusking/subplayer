@@ -9,6 +9,8 @@ services:
     container_name: subplayer-frontend
     ports:
       - "3000:80"
+    volumes:
+      - ./public/favicon.ico:/usr/share/nginx/html/favicon.ico
     depends_on:
       - subplayer-backend
     restart: unless-stopped
