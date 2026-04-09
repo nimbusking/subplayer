@@ -2,6 +2,26 @@ i.icon-when-playing {
     display: none;
 }
 
-.currently-playing i.icon-when-playing {
-    display: initial;
+.currently-playing {
+    i.icon-when-playing {
+        display: initial;
+        margin-left: 5px;
+    }
+
+    /* 针对正在播放歌曲的标题应用滚动动画 */
+    .rs-table-cell-content p {
+        display: inline-block;
+        white-space: nowrap;
+        animation: marquee 10s linear infinite alternate;
+        padding-right: 50px; /* 预留滚动空隙 */
+    }
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-30%); /* 滚动到显示出末尾文字 */
+    }
 }
