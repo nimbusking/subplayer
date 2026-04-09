@@ -84,8 +84,12 @@ class Subsonic {
         this.config = config
     }
 
-    // 设置配置信息
+// 设置配置信息
     setConfig(host, user, pass) {
+        // 清理 host 末尾的斜杠和冗余的 /rest
+        if (host) {
+            host = host.replace(/\/$/, "").replace(/\/rest$/, "")
+        }
         this.config = Object.assign(this.config, {
             host : host || (MODE === "PROXY" ? "/api" : ""),
             user : user || "",
@@ -94,8 +98,8 @@ class Subsonic {
     }
 
     // 登录/验证逻辑
-    login(user, pass, host) {
-        if (user && pass && host) {
+    login(host, user, pass) {
+        if (host && user && pass) {
             this.setConfig(host, user, pass)
         }
 
@@ -109,6 +113,11 @@ class Subsonic {
                 if (MODE === "PROXY") return true
                 throw err
             })
+    }
+
+    // 获取加密后的密码（用于存储，如果是 MD5 Token 模式则直接返回原值）
+    getEncodedPassword(password) {
+        return password
     }
     
     getArtists() {
