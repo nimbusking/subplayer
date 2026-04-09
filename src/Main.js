@@ -13,11 +13,20 @@ const NotFound = () => <p>404! Sorry, nothing here</p>
 // Init app 
 const store = configureStore()
 
+const MODE = process.env.REACT_APP_MODE || "STANDALONE"
+
 export default (props) => (
     <Provider store={store}>
         <Router>
             <NotFound default />
-            <App path="/" default />
+            { MODE === "PROXY" ? (
+                <App path="/" default />
+            ) : (
+                <AuthenticatedComponent path="/" default>
+                    <App path="/" />
+                </AuthenticatedComponent>
+            ) }
+            <Login path="/login" />
         </Router>
     </Provider>
 )

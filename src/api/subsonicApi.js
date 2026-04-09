@@ -1,23 +1,50 @@
 
 
 
+import crypto from "crypto"
+
+const MODE = process.env.REACT_APP_MODE || "STANDALONE"
+
 // Default configuration
 var defaults = {
-    host : "/api", // 默认指向代理路径
-    version : "1.9.0"
+    host : MODE === "PROXY" ? "/api" : "", // PROXY 模式默认走代理，STANDALONE 模式根据用户设置
+    version : "1.16.1",
+    user : "",
+    pass : "",
+    client : "subplayer-web",
+    format : "json"
 }
 
 // Define utils and helpers
 function buildUrl(config, action, params = {}) {
-    // 代理模式下，不需要在前端拼接 u, p, v, f 等参数，由后端统一处理
-    var base = `${config.host}/${action}`
+    var base = `${config.host}/rest/${action}.view`
     
-    const keys = Object.keys(params)
+    // 如果是 PROXY 模式，API 结构不同且由后端处理鉴权
+    if( MODE === "PROXY" ) {
+        base = `${config.host}/${action}`
+    }
+
+    const queryParams = { ...params }
+
+    // 如果是 STANDALONE 模式，添加鉴权参数
+    if( MODE === "STANDALONE" ) {
+        const salt = Math.random().toString(36).substring(2, 8)
+        const token = crypto.createHash('md5').update(config.pass + salt).digest('hex')
+        
+        queryParams["u"] = config.user
+        queryParams["t"] = token
+        queryParams["s"] = salt
+        queryParams["v"] = config.version
+        queryParams["c"] = config.client
+        queryParams["f"] = config.format
+    }
+    
+    const keys = Object.keys(queryParams)
     if (keys.length > 0) {
         base += "?"
         for (var i = 0; i < keys.length; i++) {
             const key = keys[i]
-            const value = params[key]
+            const value = queryParams[key]
             if (i > 0) base += "&"
             
             if( Array.isArray(value) ) {
@@ -57,18 +84,31 @@ class Subsonic {
         this.config = config
     }
 
-    // 免登录模式下，setConfig 仅用于修改代理地址
-    setConfig(host) {
+    // 设置配置信息
+    setConfig(host, user, pass) {
         this.config = Object.assign(this.config, {
-            host : host || "/api"
+            host : host || (MODE === "PROXY" ? "/api" : ""),
+            user : user || "",
+            pass : pass || ""
         })
     }
 
-    // 免登录模式下，login 始终返回 true 或通过 ping 代理检查
-    login() {
+    // 登录/验证逻辑
+    login(user, pass, host) {
+        if (user && pass && host) {
+            this.setConfig(host, user, pass)
+        }
+
         return perform_api_call( buildUrl(this.config, "ping") )
-            .then(() => true)
-            .catch(() => true) // 即使失败也允许进入，由后续请求决定
+            .then(result => {
+                // 如果是 STANDALONE 模式且验证成功，说明登录有效
+                return true
+            })
+            .catch(err => {
+                // PROXY 模式下即使 ping 失败也允许进入（可能是后端暂时不可达），由后续请求决定
+                if (MODE === "PROXY") return true
+                throw err
+            })
     }
     
     getArtists() {
