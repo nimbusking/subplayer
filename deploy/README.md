@@ -58,8 +58,31 @@ docker-compose up --build -d
     ```bash
     docker-compose ps
     ```
-2.  在浏览器中访问：`http://<您的服务器IP>`
+2.  在浏览器中访问：`http://<您的服务器IP>:3000`
 3.  **预期结果**：页面直接加载您的音乐库，无需输入用户名和密码。
+
+---
+
+## 猸 群晖 (Synology) NAS 部署指南
+
+对于使用群晖 NAS 的用户，推荐使用 **Container Manager** (DSM 7.2+) 进行一键部署。
+
+### 1. 准备文件
+1.  在 File Station 的 `docker` 共享文件夹下创建 `subplayer` 目录。
+2.  将项目所有文件上传至该目录（必须包含 `deploy/`, `src/`, `public/`, `Dockerfile`, `docker-compose.yml`, `package.json`）。
+3.  在该目录下新建 `.env` 文件，填入您的 Subsonic URL、用户名和密码。
+
+### 2. 使用 Container Manager (图形化)
+1.  打开 **Container Manager** -> **项目** -> **新增**。
+2.  **项目名称**: `subplayer`。
+3.  **路径**: 选择 `/docker/subplayer`。
+4.  **来源**: 选择“使用现有的 docker-compose.yml”。
+5.  点击“下一步”直到完成。系统将自动开始构建镜像并启动服务。
+
+### 3. 使用 SSH (命令行)
+1.  通过 SSH 连接到您的 NAS。
+2.  进入目录：`cd /volume1/docker/subplayer` (路径视您的卷情况而定)。
+3.  执行：`sudo docker-compose up --build -d`。
 
 ---
 

@@ -26,8 +26,8 @@ export default {
         isShuffleOn: settings.getIsShuffleOn(),
     },
     auth : {
-        isAuthenticated: false,
-        isAuthenticating: true,
+        isAuthenticated: true,
+        isAuthenticating: false,
         statusText: null
     },
     search : {

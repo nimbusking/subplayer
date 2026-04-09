@@ -17,10 +17,7 @@ export default (props) => (
     <Provider store={store}>
         <Router>
             <NotFound default />
-            <Login path="/login" />
-            <AuthenticatedComponent path="/">
-                <App default/>
-            </AuthenticatedComponent>
+            <App path="/" default />
         </Router>
     </Provider>
 )

@@ -1,8 +1,9 @@
 # 第一阶段: 构建前端
-FROM node:16-alpine AS build
+FROM node:20-alpine AS build
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+# 禁用引擎检查以防止某些旧依赖报错，并安装依赖
+RUN yarn install --frozen-lockfile --ignore-engines
 COPY . .
 RUN yarn build
 
