@@ -7,12 +7,10 @@ const MODE = process.env.REACT_APP_MODE || "STANDALONE"
 
 // Default configuration
 var defaults = {
-    host : MODE === "PROXY" ? "/api" : "", // PROXY 模式默认走代理，STANDALONE 模式根据用户设置
-    version : "1.16.1",
-    user : "",
-    pass : "",
-    client : "subplayer-web",
-    format : "json"
+    host : MODE === "PROXY" ? "/api" : null,
+    user : null,
+    password : null,
+    version : "1.9.0"
 }
 
 // Define utils and helpers
@@ -26,17 +24,13 @@ function buildUrl(config, action, params = {}) {
 
     const queryParams = { ...params }
 
-    // 如果是 STANDALONE 模式，添加鉴权参数
+    // 如果是 STANDALONE 模式，添加鉴权参数 (恢复 master 逻辑)
     if( MODE === "STANDALONE" ) {
-        const salt = Math.random().toString(36).substring(2, 8)
-        const token = crypto.createHash('md5').update(config.pass + salt).digest('hex')
-        
         queryParams["u"] = config.user
-        queryParams["t"] = token
-        queryParams["s"] = salt
+        queryParams["p"] = config.password
         queryParams["v"] = config.version
-        queryParams["c"] = config.client
-        queryParams["f"] = config.format
+        queryParams["f"] = "json"
+        queryParams["c"] = "subplayer-web"
     }
     
     const keys = Object.keys(queryParams)
@@ -84,40 +78,43 @@ class Subsonic {
         this.config = config
     }
 
-// 设置配置信息
-    setConfig(host, user, pass) {
+    // 设置配置信息
+    setConfig(host, username, password, encodePassword = true) {
         // 清理 host 末尾的斜杠和冗余的 /rest
         if (host) {
             host = host.replace(/\/$/, "").replace(/\/rest$/, "")
         }
         this.config = Object.assign(this.config, {
             host : host || (MODE === "PROXY" ? "/api" : ""),
-            user : user || "",
-            pass : pass || ""
+            user : username,
+            password : MODE === "PROXY" ? null : `enc:${encodePassword ? this.getEncodedPassword(password) : password}`,
         })
     }
 
     // 登录/验证逻辑
-    login(host, user, pass) {
-        if (host && user && pass) {
-            this.setConfig(host, user, pass)
-        }
+    login(host, username, password, encodePassword = true) {
+        if (MODE === "PROXY") return Promise.resolve(true)
 
-        return perform_api_call( buildUrl(this.config, "ping") )
+        // Perform call
+        const tempConfig = {
+            host : host.replace(/\/$/, "").replace(/\/rest$/, ""),
+            user : username,
+            password : `enc:${encodePassword ? this.getEncodedPassword(password) : password}`,
+            version : "1.9.0"
+        }
+        return perform_api_call( buildUrl(tempConfig, "ping") )
             .then(result => {
-                // 如果是 STANDALONE 模式且验证成功，说明登录有效
-                return true
-            })
-            .catch(err => {
-                // PROXY 模式下即使 ping 失败也允许进入（可能是后端暂时不可达），由后续请求决定
-                if (MODE === "PROXY") return true
-                throw err
+                return result["status"] === "ok"
             })
     }
 
-    // 获取加密后的密码（用于存储，如果是 MD5 Token 模式则直接返回原值）
     getEncodedPassword(password) {
-        return password
+        let encoded = ""
+        for (var i=0; i<password.length; i++) {
+            let hex = password.charCodeAt(i).toString(16);
+            encoded += (hex).slice(-4);
+        }
+        return encoded
     }
     
     getArtists() {

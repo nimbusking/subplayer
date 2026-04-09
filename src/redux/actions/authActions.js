@@ -10,7 +10,7 @@ export function loginUserSuccess(host, username, enc) {
     localStorage.setItem('username', username)
     localStorage.setItem('enc', enc)
     // Update subsonic API
-    subsonic.setConfig(host, username, enc)
+    subsonic.setConfig(host, username, enc, false)
     // Log in
     return {
         type: types.LOGIN_USER_SUCCESS,
@@ -34,7 +34,7 @@ export function loginUser(host, username, password, encodePassword = true) {
         dispatch(loginUserRequest())
         // Perform login
         try {
-            const success = await subsonic.login(host, username, password)
+            const success = await subsonic.login(host, username, password, encodePassword)
             if( success ) {
                 const passwordToStore = encodePassword ? subsonic.getEncodedPassword(password) : password
                 dispatch(loginUserSuccess(host, username, passwordToStore))
